@@ -1,6 +1,6 @@
-# React + Vite
+# React + Vite + Laravel (API)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Student Final Year Project, Department of Cyber Security, Faculty of Computing, Federal Univerity Dutse. In partial fulfilment for the requirements of the award of B.Sc. Cyber Security.
 
 Currently, two official plugins are available:
 
