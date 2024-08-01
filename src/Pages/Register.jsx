@@ -16,7 +16,7 @@ const Register = ({ app_name }) => {
               <div className="text-container">
                 <div className="section-title">Once you are registered, have an account now.</div>
                   <div className="card" style={{ borderRadius: 20 }}>
-                      <h2 className="h1-large text-center mt-2">Create an account</h2>
+                      <h2 className="h1-large text-center mt-2">Create an account <i className='fa fa-sign-in'></i></h2>
                       <div className="card-body">
                          <RegisterFormComponent isRegister={true} />
                       </div>

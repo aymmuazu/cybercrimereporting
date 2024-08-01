@@ -1,3 +1,4 @@
+import './assets/css/app.css'
 import './assets/css/bootstrap.min.css'
 import './assets/css/fontawesome-all.min.css'
 import './assets/css/swiper.css'
@@ -11,6 +12,12 @@ import Notfound from './Pages/Notfound'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
 import Dashboard from './Pages/Dashboard'
+import Profile from './Pages/Profile'
+import Password from './Pages/Password'
+import Report from './Pages/Report'
+import MyReport from './Pages/MyReport'
+import ViewReport from './Pages/ViewReport'
+import EditReport from './Pages/EditReport'
 
 const app_name = process.env.APP_NAME;
 
@@ -24,6 +31,13 @@ const App = () => {
         <Route path='/register'   element={<Register app_name={app_name}/>} />
         
         <Route path='/dashboard' element={<Dashboard app_name={app_name}/>} />
+        <Route path='/profile' element={<Profile app_name={app_name}/>} />
+        <Route path='/profile/changepassword' element={<Password app_name={app_name}/>} />
+
+        <Route path='/dashboard/addreport' element={<Report app_name={app_name}/>} />
+        <Route path='/dashboard/myreport' element={<MyReport app_name={app_name}/>} />
+        <Route path='/dashboard/myreport/view/:id' element={<ViewReport app_name={app_name}/>} />
+        <Route path='/dashboard/myreport/edit/:id' element={<EditReport app_name={app_name}/>} />
 
         <Route path="*" element={<Notfound  app_name={app_name}/>} />
       </Routes>

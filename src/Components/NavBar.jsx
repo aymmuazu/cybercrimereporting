@@ -30,24 +30,27 @@ const Navbar = ({ app_name }) => {
             {check == false ? (
              <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login">Login</Link>
+                  <Link className="nav-link" to="/">Home <i className='fa fa-home'></i></Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/register">Register</Link>
+                  <Link className="nav-link" to="/login">Login <i className='fa fa-sign-out'></i></Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/register">Register <i className='fa fa-sign-out'></i></Link>
                 </li>
              </>
             ): (
               <>
 
               <li className="nav-item">
-                <Link className="nav-link text-danger" aria-current="page" to="/dashboard">Dashboard</Link>
+                <Link className="nav-link text-danger" aria-current="page" to="/dashboard"><i className='fa fa-dashboard'></i> Dashboard</Link>
               </li>
 
               <li className="nav-item">
-                <Link className="nav-link" to="/login">My Reports</Link>
+                <Link className="nav-link" to="/dashboard/myreport">My Reports <i className='fa fa-book'></i></Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/register">Profile</Link>
+                <Link className="nav-link" to="/profile">Profile <i className='fa fa-user'></i></Link>
               </li>
                 
               </>
@@ -56,11 +59,11 @@ const Navbar = ({ app_name }) => {
 
           {check ? (
               <span className="nav-item">
-                <Link className="btn-solid-lg" onClick={handleLogout}>Logout</Link>
+                <Link className="btn-solid-sm bg-danger border-danger text-white" onClick={handleLogout}>Logout <i className='fa fa-sign-in'></i></Link>
               </span>
           ) : (
             <span className="nav-item">
-              <Link className="btn-solid-lg" to="/login" >Get Started <i className='fa fa-sign-in'></i></Link>
+              <Link className="btn-solid-sm bg-danger border-danger text-white" to="/register" >Get Started <i className='fa fa-sign-in'></i></Link>
             </span>
           )}
         </div>

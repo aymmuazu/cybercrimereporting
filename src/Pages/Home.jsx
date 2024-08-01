@@ -18,12 +18,12 @@ const Home = ({ app_name }) => {
                 <div className="section-title">{app_name}</div>
                 <h2 className="h1-large">{app_name}</h2>
                 <div className="p-large">
-                  An Easy Platform Designed By a Final Year Project By:<br />
+                  An Easy Platform Designed By a Final Year Student:<br />
                   <Owner />
                 </div>
                 <div style={{ marginTop: 15, display: 'flex', flexDirection: 'row', gap: 10 }}>
-                    <Link className="btn btn-solid-lg text-center w-50" to="/login">Login</Link>
-                    <Link className="btn btn-solid-lg text-center w-50" to="/register">Register</Link>
+                    <Link className="btn btn-solid-sm text-center w-50" to="/login">Login <i className='fa fa-sign-in'></i></Link>
+                    <Link className="btn btn-solid-sm text-center w-50" to="/register">Register <i className='fa fa-sign-in'></i></Link>
                 </div>
               </div>
             </div>

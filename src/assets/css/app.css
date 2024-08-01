@@ -1,0 +1,23 @@
+/* Active page background color */
+.pagination .page-item.active .page-link {
+    background-color: #dc3545; /* Custom background color for active page */
+    border-color: #dc3545; /* Border color for active page */
+}
+
+/* Default page link background color */
+.pagination .page-link {
+    background-color: #f8f9fa; /* Custom background color for pagination links */
+    border-color: #dee2e6; /* Border color for pagination links */
+}
+
+/* Hover effect for pagination links */
+.pagination .page-link:hover {
+    background-color: #e2e6ea; /* Custom background color on hover */
+}
+
+/* Custom color for "Next" and "Previous" links */
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {    
+    color: #dc3545;
+}
+

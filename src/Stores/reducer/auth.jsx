@@ -44,6 +44,8 @@ export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async (_, 
     }
 })
 
+
+
 export const logout = createAsyncThunk('auth/logout', async () => {
     localStorage.removeItem('access_token');
 });

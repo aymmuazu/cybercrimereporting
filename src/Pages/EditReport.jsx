@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getCurrentUser, logout } from '../Stores/reducer/auth';
-import Logout from '../Components/Logout';
 import useUserData from '../Components/UserData';
 import CustomTitlePage from '../Components/CustomTitlePage';
 import ImageContainer from '../Components/ImageContainer';
 import Spinner from '../Components/Spinner';
 import { userisAdmin } from '../Components/AuthMiddleware';
-import { getreport } from '../Stores/reducer/report';
+import { viewreport } from '../Stores/reducer/report';
+import EditReportFormComponent from '../Components/EditReportFormComponent';
 
-const Dashboard = ({ app_name }) => {
+const EditReport = ({ app_name }) => {
   const [showSpinner, setShowSpinner] = useState(true);
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  CustomTitlePage({ title: 'Dashboard', app_name: app_name });
+  CustomTitlePage({ title: 'Edit Report', app_name: app_name });
   useUserData();
 
   const isAdmin = userisAdmin();
-  const userData = useSelector((state) => state.auth.user);
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const reports = useSelector((state) => state.report.data);
+  const userData = useSelector(state => state.auth.user);
+  const isLoading = useSelector(state => state.auth.isLoading);
+  const report = useSelector((state) => state.report.viewReport);
 
   useEffect(() => {
-    dispatch(getreport());
+    dispatch(viewreport(id));
     const timer = setTimeout(() => {
       setShowSpinner(false);
     }, 150);
+
     return () => clearTimeout(timer);
   }, [dispatch]);
 
@@ -37,7 +39,9 @@ const Dashboard = ({ app_name }) => {
     });
   };
 
-  if (showSpinner || (userData == null && isLoading)) {
+
+  if (showSpinner || (userData == null && isLoading && report == null)) {
+   
     return (
       <div>
         <div className="pt-5">
@@ -56,10 +60,10 @@ const Dashboard = ({ app_name }) => {
         </div>
       </div>
     );
-  } else if (userData !== null && !isLoading) {
-    const { first_name, email } = userData;
-    const countreports = reports ? reports.reports.length : 0;
-
+  } else if (userData !== null && !isLoading && report !== null) { 
+    const { first_name } = userData;
+    const viewreport = report.report;
+    
     return (
       <div>
         <div className="pt-5">
@@ -67,8 +71,7 @@ const Dashboard = ({ app_name }) => {
             <div className="row pt-5">
               <div className="col-lg-6 col-xl">
                 <div className="text-container">
-                  <div className="section-title">Welcome Back {isAdmin && (<>Admin,</>)} {first_name}!</div>
-                  
+                  <div className="section-title">Welcome Back{isAdmin && (<> Admin</>)}, {first_name}!</div>
                   <button
                     onClick={handleLogout}
                     style={{ float: 'right' }}
@@ -78,30 +81,23 @@ const Dashboard = ({ app_name }) => {
                   </button>
                   <div className="card" style={{ borderRadius: '20px' }}>
                     <div className="card-body">
-                      <Link to="/dashboard/myreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        My Reports ({countreports})
-                      </Link>
-                      <Link to="/dashboard/addreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        Add Reports
-                      </Link>
-                      <Link to="/email" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        Email Reminder
-                      </Link>
+                      <h4 className="text-center">Edit Report <i className='fa fa-edit'></i></h4>
+                      <EditReportFormComponent report={viewreport} />
                     </div>
                   </div>
                 </div>
               </div>
-
               <div className="col-lg-6 col-xl">
                 <ImageContainer />
               </div>
-
             </div>
           </div>
         </div>
       </div>
     );
   }
+
+  return null;
 };
 
-export default Dashboard;
+export default EditReport;

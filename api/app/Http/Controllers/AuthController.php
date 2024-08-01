@@ -50,7 +50,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'message' => 'You are now logged in.',
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => getenv('JWT_TTL')
         ]);
     }
 }

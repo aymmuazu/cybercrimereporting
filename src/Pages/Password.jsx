@@ -8,27 +8,26 @@ import CustomTitlePage from '../Components/CustomTitlePage';
 import ImageContainer from '../Components/ImageContainer';
 import Spinner from '../Components/Spinner';
 import { userisAdmin } from '../Components/AuthMiddleware';
-import { getreport } from '../Stores/reducer/report';
+import TimesAgo from '../Components/TimesAgo'
+import PasswordFormComponent from '../Components/PasswordFormComponent';
 
-const Dashboard = ({ app_name }) => {
+const Password = ({ app_name }) => {
   const [showSpinner, setShowSpinner] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  CustomTitlePage({ title: 'Dashboard', app_name: app_name });
+  CustomTitlePage({ title: 'Change Password', app_name: app_name });
   useUserData();
-
   const isAdmin = userisAdmin();
-  const userData = useSelector((state) => state.auth.user);
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const reports = useSelector((state) => state.report.data);
+  const userData = useSelector(state => state.auth.user);
+  const isLoading = useSelector(state => state.auth.isLoading);
 
   useEffect(() => {
-    dispatch(getreport());
     const timer = setTimeout(() => {
       setShowSpinner(false);
     }, 150);
+
     return () => clearTimeout(timer);
-  }, [dispatch]);
+  }, []);
 
   const handleLogout = (event) => {
     event.preventDefault();
@@ -57,8 +56,7 @@ const Dashboard = ({ app_name }) => {
       </div>
     );
   } else if (userData !== null && !isLoading) {
-    const { first_name, email } = userData;
-    const countreports = reports ? reports.reports.length : 0;
+    const { first_name, last_name, middle_name, email, created_at } = userData;
 
     return (
       <div>
@@ -67,8 +65,7 @@ const Dashboard = ({ app_name }) => {
             <div className="row pt-5">
               <div className="col-lg-6 col-xl">
                 <div className="text-container">
-                  <div className="section-title">Welcome Back {isAdmin && (<>Admin,</>)} {first_name}!</div>
-                  
+                  <div className="section-title">Welcome Back{isAdmin && (<> Admin</>)}, {first_name}!</div>
                   <button
                     onClick={handleLogout}
                     style={{ float: 'right' }}
@@ -78,15 +75,8 @@ const Dashboard = ({ app_name }) => {
                   </button>
                   <div className="card" style={{ borderRadius: '20px' }}>
                     <div className="card-body">
-                      <Link to="/dashboard/myreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        My Reports ({countreports})
-                      </Link>
-                      <Link to="/dashboard/addreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        Add Reports
-                      </Link>
-                      <Link to="/email" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        Email Reminder
-                      </Link>
+                        <h4 className='text-center'>Change Password <i className='fa fa-key'></i></h4>
+                        <PasswordFormComponent />
                     </div>
                   </div>
                 </div>
@@ -104,4 +94,4 @@ const Dashboard = ({ app_name }) => {
   }
 };
 
-export default Dashboard;
+export default Password;
