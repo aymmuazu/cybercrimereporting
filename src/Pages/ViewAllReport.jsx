@@ -10,7 +10,6 @@ import { userisAdmin } from '../Components/AuthMiddleware';
 import { getallreport } from '../Stores/reducer/report';
 import ReactPaginate from 'react-paginate';
 import Search from '../Components/Search';
-import DeleteReport from '../Components/DeleteReport';
 
 const ViewAllReport = ({ app_name }) => {
   const [showSpinner, setShowSpinner] = useState(true);
@@ -46,7 +45,7 @@ const ViewAllReport = ({ app_name }) => {
     setCurrentPage(event.selected);
   };
 
-  if (showSpinner || (userData == null && isLoading)) {
+  if (showSpinner || userData == null || isLoading || reports == null) {
     return (
       <div>
         <div className="pt-5">
