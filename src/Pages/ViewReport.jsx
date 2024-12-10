@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { getCurrentUser, logout } from '../Stores/reducer/auth';
+import { logout } from '../Stores/reducer/auth';
 import useUserData from '../Components/UserData';
 import CustomTitlePage from '../Components/CustomTitlePage';
 import ImageContainer from '../Components/ImageContainer';
