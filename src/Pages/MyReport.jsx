@@ -46,7 +46,7 @@ const MyReport = ({ app_name }) => {
     setCurrentPage(event.selected);
   };
 
-  if (showSpinner || userData == null || isLoading || report == null) {
+  if (showSpinner || userData == null || isLoading || reports == null) {
     return (
       <div>
         <div className="pt-5">
