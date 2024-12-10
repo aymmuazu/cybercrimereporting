@@ -40,8 +40,7 @@ const EditReport = ({ app_name }) => {
   };
 
 
-  if (showSpinner || (userData == null && isLoading && report == null)) {
-   
+  if (showSpinner || userData == null || isLoading || report == null) {
     return (
       <div>
         <div className="pt-5">

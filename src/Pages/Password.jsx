@@ -36,7 +36,7 @@ const Password = ({ app_name }) => {
     });
   };
 
-  if (showSpinner || (userData == null && isLoading)) {
+  if (showSpinner || userData == null || isLoading) {
     return (
       <div>
         <div className="pt-5">
@@ -56,7 +56,7 @@ const Password = ({ app_name }) => {
       </div>
     );
   } else if (userData !== null && !isLoading) {
-    const { first_name, last_name, middle_name, email, created_at } = userData;
+    const { first_name } = userData;
 
     return (
       <div>

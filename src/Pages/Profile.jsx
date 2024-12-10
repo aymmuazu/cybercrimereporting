@@ -37,7 +37,7 @@ const Profile = ({ app_name }) => {
     });
   };
 
-  if (showSpinner || (userData == null && isLoading)) {
+  if (showSpinner || userData == null || isLoading) {
     return (
       <div>
         <div className="pt-5">

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { getCurrentUser, logout } from '../Stores/reducer/auth';
-import Logout from '../Components/Logout';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../Stores/reducer/auth';
 import useUserData from '../Components/UserData';
 import CustomTitlePage from '../Components/CustomTitlePage';
 import ImageContainer from '../Components/ImageContainer';
 import Spinner from '../Components/Spinner';
 import { userisAdmin } from '../Components/AuthMiddleware';
-import TimesAgo from '../Components/TimesAgo'
 import ReportFormComponent from '../Components/ReportFormComponent';
 
 const Report = ({ app_name }) => {
@@ -38,7 +36,7 @@ const Report = ({ app_name }) => {
     });
   };
 
-  if (showSpinner || (userData == null && isLoading)) {
+  if (showSpinner || userData == null || isLoading) {
     return (
       <div>
         <div className="pt-5">
@@ -58,7 +56,7 @@ const Report = ({ app_name }) => {
       </div>
     );
   } else if (userData !== null && !isLoading) {
-    const { first_name, last_name, role, middle_name, email, created_at } = userData;
+    const { first_name } = userData;
 
     return (
       <div>
