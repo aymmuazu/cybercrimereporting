@@ -19,6 +19,7 @@ import MyReport from './Pages/MyReport'
 import ViewReport from './Pages/ViewReport'
 import EditReport from './Pages/EditReport'
 import ViewAllReport from './Pages/ViewAllReport'
+import ViewReportTypes from './Pages/ViewReportTypes'
 
 const app_name = process.env.APP_NAME;
 
@@ -41,6 +42,7 @@ const App = () => {
         <Route path='/dashboard/myreport/edit/:id' element={<EditReport app_name={app_name}/>} />
 
         <Route path='/dashboard/admin/allreports' element={<ViewAllReport app_name={app_name} />} />
+        <Route path='/dashboard/admin/reportTypes' element={<ViewReportTypes app_name={app_name} />} />
 
         <Route path="*" element={<Notfound  app_name={app_name}/>} />
       </Routes>

@@ -74,19 +74,24 @@ class UserController extends Controller
 
     public function getAllReport()
     {
-        $reports = Report::orderBy('id', 'desc')->get();
+        $reports = Report::with('user')->orderBy('id', 'desc')->get();
+        $reportsWithUserEmails = $reports->map(function ($report) {
+            $reportArray = $report->toArray(); 
+            return $reportArray;
+        });
 
         return response()->json([
             'message' => 'All Reports retrieved successfully.',
-            'reports' => $reports
-        ]);   
-
+            'reports' => $reportsWithUserEmails
+        ]);
     }
+
+
 
     public function getSingleReport($id)
     {
-        $report = Report::where('user_id', auth()->user()->id)
-                        ->where('id', $id)
+        $report = Report::where('id', $id)
+                        //->where('user_id', auth()->user()->id)
                         ->first();
                             
         if (!$report) {

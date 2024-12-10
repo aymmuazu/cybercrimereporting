@@ -83,11 +83,6 @@ const ViewReport = ({ app_name }) => {
                   <div className="card" style={{ borderRadius: '20px' }}>
                     <div className="card-body">
                       <h4 className="text-center">{viewreport.title}</h4>
-                      {viewreport.evidence && (
-                        <>
-                        </>
-                      )}
-
                       <div className="card">
                         <div className="card-body text-center">
                           <img src={reportImage} alt={viewreport.title} width={100}/>

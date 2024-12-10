@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice, isRejected } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const initialState = {
     isLoading: false,
@@ -8,6 +7,7 @@ const initialState = {
     data: null,
     deleteReport: null,
     allReport: null,
+    reporttype: null
 };
 
 const api_url = process.env.APP_API_URL;
@@ -28,7 +28,35 @@ export const addreport = createAsyncThunk('user/addreport', async (data, thunkAP
     }
 })
 
+export const addreporttype = createAsyncThunk('user/addreporttype', async (data, thunkAPI) => {
+    try {
+        const token = localStorage.getItem('access_token') ?? "";
 
+        const response = await axios.post(`${api_url}/user/addreporttype`, data, {
+            headers: {
+                Authorization: 'Bearer' + token
+            }
+        });
+        return response.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response.data);
+    }
+})
+
+export const getreporttype = createAsyncThunk('user/getreporttype', async (_, thunkAPI) => {
+    try {
+        const token = localStorage.getItem('access_token') ?? "";
+
+        const response = await axios.get(`${api_url}/user/getreporttype`, {
+            headers: {
+                Authorization: 'Bearer' + token
+            }
+        });
+        return response.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response.data);
+    }
+})
 
 export const getreport = createAsyncThunk('user/getreport', async (_, thunkAPI) => {
     try {
@@ -65,6 +93,21 @@ export const deletereport = createAsyncThunk('user/deletereport', async (id, thu
         const token = localStorage.getItem('access_token') ?? "";
 
         const response = await axios.get(`${api_url}/user/deletereport/${id}`, {
+            headers: {
+                Authorization: 'Bearer' + token
+            }
+        });
+        return response.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response.data);
+    }
+})
+
+export const deleteReportType = createAsyncThunk('user/deleteReportType', async (id, thunkAPI) => {
+    try {
+        const token = localStorage.getItem('access_token') ?? "";
+
+        const response = await axios.get(`${api_url}/user/deletereporttype/${id}`, {
             headers: {
                 Authorization: 'Bearer' + token
             }
@@ -127,6 +170,20 @@ const reportSlice  = createSlice({
             state.isRejected = true;
         })
 
+        //Add Report Type Slice
+        .addCase(addreporttype.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(addreporttype.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.data = action.payload
+        })
+        .addCase(addreporttype.rejected, (state) => {
+            state.isLoading = false;
+            state.data = null;
+            state.isRejected = true;
+        })
+
         //Get Report Slice
         .addCase(getreport.pending, (state) => {
             state.isLoading = true;
@@ -138,6 +195,20 @@ const reportSlice  = createSlice({
         .addCase(getreport.rejected, (state) => {
             state.isLoading = false;
             state.data = null;
+            state.isRejected = true;
+        })
+
+        //Get Report Type Slice
+        .addCase(getreporttype.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(getreporttype.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.reporttype = action.payload
+        })
+        .addCase(getreporttype.rejected, (state) => {
+            state.isLoading = false;
+            state.reporttype = null;
             state.isRejected = true;
         })
 

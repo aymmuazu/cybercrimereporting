@@ -1,0 +1,4 @@
+1. View Sender of Report
+2. Add, Delete Report Types 
+3. Finish Up
+4. Deploy

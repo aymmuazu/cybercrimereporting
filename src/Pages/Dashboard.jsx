@@ -40,7 +40,8 @@ const Dashboard = ({ app_name }) => {
     });
   };
 
-  if (showSpinner || (userData == null && isLoading)) {
+  if (showSpinner || userData == null || isLoading || reports == null || allreports == null) {
+    
     return (
       <div>
         <div className="pt-5">
@@ -59,6 +60,7 @@ const Dashboard = ({ app_name }) => {
         </div>
       </div>
     );
+
   } else if (userData !== null && !isLoading) {
     const { first_name } = userData;
     const countreports = reports ? reports.reports.length : 0;
@@ -88,7 +90,7 @@ const Dashboard = ({ app_name }) => {
                           <Link to="/dashboard/admin/allreports" className="btn-solid-lg mb-2 w-100 text-center fs-5">
                             All Reports ({allreportscount})
                           </Link>
-                          <Link to="/dashboard/myreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
+                          <Link to="/dashboard/admin/reportTypes" className="btn-solid-lg mb-2 w-100 text-center fs-5">
                             Report Types 
                           </Link>
                           

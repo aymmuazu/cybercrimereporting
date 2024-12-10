@@ -9,7 +9,7 @@ import Spinner from '../Components/Spinner';
 import { userisAdmin } from '../Components/AuthMiddleware';
 import { getallreport } from '../Stores/reducer/report';
 import ReactPaginate from 'react-paginate';
-import Search from '../Components/Search';
+
 
 const ViewAllReport = ({ app_name }) => {
   const [showSpinner, setShowSpinner] = useState(true);
@@ -95,16 +95,15 @@ const ViewAllReport = ({ app_name }) => {
                         <div className='alert alert-warning'><i className='fa fa-exclamation-triangle'></i> No reports available.</div>
                       ) : (
                         <>
-                          <Search />
                           
                           <div className="table-responsive">
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
                                   <th>S/N</th>
+                                  <th>Sender</th>
                                   <th>Title</th>
                                   <th>Category</th>
-                                  <th>Location</th>
                                   <th>Action</th>
                                 </tr>
                               </thead>
@@ -112,9 +111,13 @@ const ViewAllReport = ({ app_name }) => {
                                 {currentReports.map((report, index) => (
                                   <tr key={report.id}>
                                     <td>{indexOfFirstReport + index + 1}.</td>
+                                    <td>
+                                        <span>{report.user.first_name+ ' ' +report.user.last_name} <br/ ></span>
+                                        <span className='fw-bolder'>{ report.user.email }</span>
+
+                                    </td>
                                     <td>{report.title}</td>
                                     <td>{report.category}</td>
-                                    <td>{report.location}</td>
                                     <td>
                                       <div style={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
                                         <Link to={`/dashboard/myreport/view/${report.id}`} className='btn btn-danger mb-2 btn-sm'><i className='fa fa-eye'></i></Link>

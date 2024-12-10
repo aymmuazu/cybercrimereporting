@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomInput from './CustomInput';
 import CustomButton from './CustomButton';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Spinner from './Spinner';
 import CustomAlert from './CustomAlert';
-import { addreport } from '../Stores/reducer/report';
+import { addreport, getreporttype } from '../Stores/reducer/report';
 
 const ReportFormComponent = () => {
     const dispatch = useDispatch();
@@ -25,6 +25,17 @@ const ReportFormComponent = () => {
     const [alert, setAlert] = useState(false);
     const [alertTitle, setAlertTitle] = useState('');
     const [alertBg, setAlertBg] = useState('');
+    const allreportTypes = useSelector(state => state.report.reporttype);
+
+    let reportTypes = null;
+
+    if (allreportTypes) {
+        reportTypes = allreportTypes.data;
+    }
+
+    useEffect(() => {
+        dispatch(getreporttype());
+    }, [dispatch]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -83,7 +94,15 @@ const ReportFormComponent = () => {
                         
                         <CustomInput LabelTitle="Report Title" inputAction={setReportTitle} type="text" name="report_title" isRequired={true} />
                         <CustomInput LabelTitle="Description" inputAction={setDescription} type="textarea" name="description" isRequired={true} />
-                        <CustomInput LabelTitle="Category" inputAction={setCategory} type="select" name="category" isRequired={true} options={['Phishing', 'Identity Theft', 'Malware']} />
+                        <CustomInput 
+                            LabelTitle="Category" 
+                            inputAction={setCategory} 
+                            type="select" 
+                            name="category" 
+                            isRequired={true} 
+                            options={reportTypes ? reportTypes.map((reportType) => reportType.title) : []} 
+                        />
+
                         <CustomInput LabelTitle="Date and Time of Incident" inputAction={setIncidentDate} type="datetime-local" name="incident_date" isRequired={true} />
                         <CustomInput LabelTitle="Location" inputAction={setLocation} type="text" name="location" isRequired={true} />
                         <CustomInput LabelTitle="Evidence (optional)" inputAction={setEvidence} type="file" name="evidence" isRequired={false} />
