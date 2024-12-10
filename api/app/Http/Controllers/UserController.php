@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -52,7 +53,7 @@ class UserController extends Controller
         $report->user_id = auth()->user()->id;
 
         if ($request->hasFile('evidence')) {
-            $report->evidence = $request->file('evidence')->store('evidence');
+            $report->evidence = $request->file('evidence')->store('public/evidence');
         }
 
         $report->save();
@@ -71,20 +72,35 @@ class UserController extends Controller
 
     }
 
+    public function getAllReport()
+    {
+        $reports = Report::orderBy('id', 'desc')->get();
+
+        return response()->json([
+            'message' => 'All Reports retrieved successfully.',
+            'reports' => $reports
+        ]);   
+
+    }
+
     public function getSingleReport($id)
     {
         $report = Report::where('user_id', auth()->user()->id)
                         ->where('id', $id)
                         ->first();
-        
+                            
         if (!$report) {
             return response()->json([
                 'message' => 'No Report found.',
             ], 500);    
         }
+
+        $fileUrl = Storage::url($report->evidence);
+        
         return response()->json([
             'message' => 'Report retrieved successfully.',
-            'report' => $report
+            'report' => $report,
+            'evidenceURL' => $fileUrl
         ]);   
 
     }
@@ -103,10 +119,10 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function editReport($id, Request $request)
+    public function editReport(Request $request)
     {
         $report = Report::where('user_id', auth()->user()->id)
-                        ->where('id', $id)
+                        ->where('id', $request->id)
                         ->first();
         
         if (!$report) {
@@ -114,9 +130,6 @@ class UserController extends Controller
                 'message' => 'No Report found.',
             ], 404);    
         }
-
-        dd($request->file('evidence'));
-        
 
         // Update the report fields
         $report->title = request('title', $request->title);
@@ -126,7 +139,7 @@ class UserController extends Controller
         $report->location = request('location', $request->location);
 
         if ($request->hasFile('evidence')) {
-            $report->evidence = $request->file('evidence')->store('evidence');
+            $report->evidence = $request->file('evidence')->store('public/evidence');
         }
 
         $report->contact = request('contact', $request->contact);

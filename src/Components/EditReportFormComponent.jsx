@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import CustomInput from './CustomInput';
 import CustomButton from './CustomButton';
-import { useDispatch } from 'react-redux';
 import Spinner from './Spinner';
 import CustomAlert from './CustomAlert';
 import { editreport } from '../Stores/reducer/report';
@@ -12,13 +12,15 @@ const EditReportFormComponent = ({ report }) => {
     const navigate = useNavigate();
 
     // Initialize state with existing report values
-    const [reportTitle, setReportTitle] = useState(report?.title || '');
-    const [description, setDescription] = useState(report?.description || '');
-    const [category, setCategory] = useState(report?.category || '');
-    const [incidentDate, setIncidentDate] = useState(report?.incident_date || '');
-    const [location, setLocation] = useState(report?.location || '');
-    const [evidence, setEvidence] = useState(null);
-    const [contact, setContact] = useState(report?.contact || '');
+    const [formData, setFormData] = useState({
+        title: report?.title || '',
+        description: report?.description || '',
+        category: report?.category || '',
+        incident_date: report?.incident_date || '',
+        location: report?.location || '',
+        evidence: null,
+        contact: report?.contact || '',
+    });
 
     const [disabled, setDisabled] = useState(false);
     const [btnTitle, setBtnTitle] = useState('Update');
@@ -27,22 +29,29 @@ const EditReportFormComponent = ({ report }) => {
     const [alertTitle, setAlertTitle] = useState('');
     const [alertBg, setAlertBg] = useState('');
 
+    // Handle form changes
+    const handleChange = (name, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setDisabled(true);
         setBtnTitle('Processing...');
 
-        const formData = new FormData();
-        formData.append('title', reportTitle);
-        formData.append('description', description);
-        formData.append('category', category);
-        formData.append('incident_date', incidentDate);
-        formData.append('location', location);
-        formData.append('id', report.id);
-        if (evidence) formData.append('evidence', evidence);
-        formData.append('contact', contact);
+        const submissionData = new FormData();
+        
+        Object.keys(formData).forEach((key) => {
+            if (formData[key]) {
+                submissionData.append(key, formData[key]);
+            }
+        });
+        submissionData.append('id', report?.id || '');
 
-        dispatch(editreport(formData)).then((action) => {
+        dispatch(editreport(submissionData)).then((action) => {
             setIsLoading(false);
             switch (action.type) {
                 case editreport.pending.type:
@@ -52,7 +61,6 @@ const EditReportFormComponent = ({ report }) => {
                     setAlert(true);
                     setAlertTitle('Something went wrong, check your inputs.');
                     setAlertBg('alert-danger');
-
                     setTimeout(() => {
                         setAlert(false);
                         setDisabled(false);
@@ -63,7 +71,6 @@ const EditReportFormComponent = ({ report }) => {
                     setAlert(true);
                     setAlertTitle('Report Edited successfully!');
                     setAlertBg('alert-success');
-
                     setTimeout(() => {
                         navigate('/dashboard/myreport');
                     }, 2000);
@@ -79,70 +86,68 @@ const EditReportFormComponent = ({ report }) => {
             {isLoading ? (
                 <Spinner />
             ) : (
-                <>
-                    <form onSubmit={handleSubmit}>
-                        {alert && (<CustomAlert title={alertTitle} bg={alertBg} />)}
-                        
-                        <CustomInput 
-                            LabelTitle="Report Title" 
-                            value={reportTitle} 
-                            inputAction={setReportTitle} 
-                            type="text" 
-                            name="report_title" 
-                            isRequired={true} 
-                        />
-                        <CustomInput 
-                            LabelTitle="Description" 
-                            value={description} 
-                            inputAction={setDescription} 
-                            type="textarea" 
-                            name="description" 
-                            isRequired={true} 
-                        />
-                        <CustomInput 
-                            LabelTitle="Category" 
-                            value={category} 
-                            inputAction={setCategory} 
-                            type="select" 
-                            name="category" 
-                            isRequired={true} 
-                            options={['Phishing', 'Identity Theft', 'Malware']} 
-                        />
-                        <CustomInput 
-                            LabelTitle="Date and Time of Incident" 
-                            value={incidentDate} 
-                            inputAction={setIncidentDate} 
-                            type="datetime-local" 
-                            name="incident_date" 
-                            isRequired={true} 
-                        />
-                        <CustomInput 
-                            LabelTitle="Location" 
-                            value={location} 
-                            inputAction={setLocation} 
-                            type="text" 
-                            name="location" 
-                            isRequired={true} 
-                        />
-                        <CustomInput 
-                            LabelTitle="Evidence (optional)" 
-                            inputAction={setEvidence} 
-                            type="file" 
-                            name="evidence" 
-                            isRequired={false} 
-                        />
-                        <CustomInput 
-                            LabelTitle="Contact Information (optional)" 
-                            value={contact} 
-                            inputAction={setContact} 
-                            type="text" 
-                            name="contact" 
-                            isRequired={false} 
-                        />
+                <form onSubmit={handleSubmit}>
+                    {alert && <CustomAlert title={alertTitle} bg={alertBg} />}
 
-                        <CustomButton title={btnTitle} disabled={disabled} />
-                    </form>
-                </>
+                    <CustomInput
+                        LabelTitle="Report Title"
+                        value={formData.title}
+                        inputAction={(value) => handleChange('title', value)}
+                        type="text"
+                        name="title"
+                        isRequired={true}
+                    />
+                    <CustomInput
+                        LabelTitle="Description"
+                        value={formData.description}
+                        inputAction={(value) => handleChange('description', value)}
+                        type="textarea"
+                        name="description"
+                        isRequired={true}
+                    />
+                    <CustomInput
+                        LabelTitle="Category"
+                        value={formData.category}
+                        inputAction={(value) => handleChange('category', value)}
+                        type="select"
+                        name="category"
+                        isRequired={true}
+                        options={['Phishing', 'Identity Theft', 'Malware']}
+                    />
+                    <CustomInput
+                        LabelTitle="Date and Time of Incident"
+                        value={formData.incident_date}
+                        inputAction={(value) => handleChange('incident_date', value)}
+                        type="datetime-local"
+                        name="incident_date"
+                        isRequired={true}
+                    />
+                    <CustomInput
+                        LabelTitle="Location"
+                        value={formData.location}
+                        inputAction={(value) => handleChange('location', value)}
+                        type="text"
+                        name="location"
+                        isRequired={true}
+                    />
+                    <CustomInput
+                        LabelTitle="Evidence (optional)"
+                        inputAction={(file) => handleChange('evidence', file)}
+                        type="file"
+                        name="evidence"
+                        isRequired={false}
+                    />
+                    <CustomInput
+                        LabelTitle="Contact Information (optional)"
+                        value={formData.contact}
+                        inputAction={(value) => handleChange('contact', value)}
+                        type="text"
+                        name="contact"
+                        isRequired={false}
+                    />
+
+                    <CustomButton title={btnTitle} disabled={disabled} />
+                </form>
             )}
         </div>
     );

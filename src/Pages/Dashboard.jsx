@@ -8,7 +8,8 @@ import CustomTitlePage from '../Components/CustomTitlePage';
 import ImageContainer from '../Components/ImageContainer';
 import Spinner from '../Components/Spinner';
 import { userisAdmin } from '../Components/AuthMiddleware';
-import { getreport } from '../Stores/reducer/report';
+import { getallreport, getreport } from '../Stores/reducer/report';
+
 
 const Dashboard = ({ app_name }) => {
   const [showSpinner, setShowSpinner] = useState(true);
@@ -21,9 +22,11 @@ const Dashboard = ({ app_name }) => {
   const userData = useSelector((state) => state.auth.user);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const reports = useSelector((state) => state.report.data);
+  const allreports = useSelector((state) => state.report.allReport);
 
   useEffect(() => {
     dispatch(getreport());
+    dispatch(getallreport());
     const timer = setTimeout(() => {
       setShowSpinner(false);
     }, 150);
@@ -57,8 +60,9 @@ const Dashboard = ({ app_name }) => {
       </div>
     );
   } else if (userData !== null && !isLoading) {
-    const { first_name, email } = userData;
+    const { first_name } = userData;
     const countreports = reports ? reports.reports.length : 0;
+    const allreportscount = allreports ? allreports.reports.length: 0;
 
     return (
       <div>
@@ -77,17 +81,32 @@ const Dashboard = ({ app_name }) => {
                     Logout
                   </button>
                   <div className="card" style={{ borderRadius: '20px' }}>
-                    <div className="card-body">
-                      <Link to="/dashboard/myreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        My Reports ({countreports})
-                      </Link>
-                      <Link to="/dashboard/addreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        Add Reports
-                      </Link>
-                      <Link to="/email" className="btn-solid-lg mb-2 w-100 text-center fs-5">
-                        Email Reminder
-                      </Link>
-                    </div>
+
+                    {isAdmin ? (
+                      <>
+                        <div className="card-body">
+                          <Link to="/dashboard/admin/allreports" className="btn-solid-lg mb-2 w-100 text-center fs-5">
+                            All Reports ({allreportscount})
+                          </Link>
+                          <Link to="/dashboard/myreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
+                            Report Types 
+                          </Link>
+                          
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="card-body">
+                          <Link to="/dashboard/myreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
+                            My Reports ({countreports})
+                          </Link>
+                          <Link to="/dashboard/addreport" className="btn-solid-lg mb-2 w-100 text-center fs-5">
+                            Add Reports
+                          </Link>
+
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

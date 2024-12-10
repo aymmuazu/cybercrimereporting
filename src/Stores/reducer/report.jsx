@@ -7,6 +7,7 @@ const initialState = {
     isRejected: false,
     data: null,
     deleteReport: null,
+    allReport: null,
 };
 
 const api_url = process.env.APP_API_URL;
@@ -34,6 +35,21 @@ export const getreport = createAsyncThunk('user/getreport', async (_, thunkAPI) 
         const token = localStorage.getItem('access_token') ?? "";
 
         const response = await axios.get(`${api_url}/user/getreport`, {
+            headers: {
+                Authorization: 'Bearer' + token
+            }
+        });
+        return response.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response.data);
+    }
+})
+
+export const getallreport = createAsyncThunk('user/getallreport', async (_, thunkAPI) => {
+    try {
+        const token = localStorage.getItem('access_token') ?? "";
+
+        const response = await axios.get(`${api_url}/user/getallreport`, {
             headers: {
                 Authorization: 'Bearer' + token
             }
@@ -74,11 +90,12 @@ export const viewreport = createAsyncThunk('user/getsinglereport', async (id, th
     }
 })
 
-export const editreport = createAsyncThunk('user/editreport', async (formData, thunkAPI) => {
+
+
+export const editreport = createAsyncThunk('user/editreport', async (submissionData, thunkAPI) => {
     try {
         const token = localStorage.getItem('access_token') ?? "";
-
-        const response = await axios.post(`${api_url}/user/editsinglereport/${formData.id}`, formData, {
+        const response = await axios.post(`${api_url}/user/editsinglereport`, submissionData, {
             headers: {
                 Authorization: 'Bearer' + token
             }
@@ -119,6 +136,20 @@ const reportSlice  = createSlice({
             state.data = action.payload
         })
         .addCase(getreport.rejected, (state) => {
+            state.isLoading = false;
+            state.data = null;
+            state.isRejected = true;
+        })
+
+        //Get All Report Slice
+        .addCase(getallreport.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(getallreport.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.allReport = action.payload
+        })
+        .addCase(getallreport.rejected, (state) => {
             state.isLoading = false;
             state.data = null;
             state.isRejected = true;

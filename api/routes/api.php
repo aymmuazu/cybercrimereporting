@@ -23,8 +23,9 @@ Route::group([
     Route::post('changepassword', [UserController::class, 'changePassword']);
     Route::post('addreport', [UserController::class, 'addReport']);
     Route::get('getreport', [UserController::class, 'getReport']);
+    Route::get('getallreport', [UserController::class, 'getAllReport']);
     Route::get('getsinglereport/{id}', [UserController::class, 'getSingleReport']);
-    Route::post('editsinglereport/{id}', [UserController::class, 'editReport']);
+    Route::post('editsinglereport', [UserController::class, 'editReport']);
 
     Route::get('deletereport/{deleteReportId}', [UserController::class, 'deleteReport']);
 });

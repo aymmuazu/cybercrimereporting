@@ -63,6 +63,8 @@ const ViewReport = ({ app_name }) => {
     const { first_name } = userData;
     const viewreport = report.report;
 
+    const reportImage = api_url+report.evidenceURL;
+
     return (
       <div>
         <div className="pt-5">
@@ -85,21 +87,31 @@ const ViewReport = ({ app_name }) => {
                         <>
                         </>
                       )}
-                      <p><strong>Description:</strong> {viewreport.description}</p>
-                      <p><strong>Category:</strong> {viewreport.category}</p>
-                      <p><strong>Location:</strong> {viewreport.location}</p>
-                      <p><strong>Incident Date:</strong> {new Date(viewreport.incident_date).toLocaleString()}</p>
-                      <p><strong>Contact:</strong> {viewreport.contact}</p>
-                      <p><strong>Reported On:</strong> {new Date(viewreport.created_at).toLocaleString()}</p>
-                      <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 3 }}>
-                        <Link to="/dashboard/myreport" className="btn btn-solid-sm mb-2">Back to Reports <i className='fa fa-arrow-left'></i></Link>
-                        <button 
-                          onClick={() => window.print()} 
-                          className="btn btn-solid-sm mb-2"
-                        >
-                          Print <i className='fa fa-print'></i>
-                        </button>
+
+                      <div className="card">
+                        <div className="card-body text-center">
+                          <img src={reportImage} alt={viewreport.title} width={100}/>
+                        </div>
                       </div>
+                      
+                      <div className="pt-2">
+                        <p><strong>Description:</strong> {viewreport.description}</p>
+                        <p><strong>Category:</strong> {viewreport.category}</p>
+                        <p><strong>Location:</strong> {viewreport.location}</p>
+                        <p><strong>Incident Date:</strong> {new Date(viewreport.incident_date).toLocaleString()}</p>
+                        <p><strong>Contact:</strong> {viewreport.contact}</p>
+                        <p><strong>Reported On:</strong> {new Date(viewreport.created_at).toLocaleString()}</p>
+                        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'row', gap: 3 }}>
+                          <Link to="/dashboard/myreport" className="btn btn-solid-sm mb-2">Back to Reports <i className='fa fa-arrow-left'></i></Link>
+                          <button 
+                            onClick={() => window.print()} 
+                            className="btn btn-solid-sm mb-2"
+                          >
+                            Print <i className='fa fa-print'></i>
+                          </button>
+                        </div>
+                      </div>
+                      
                     </div>
                   </div>
                 </div>
